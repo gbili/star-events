@@ -1,55 +1,89 @@
-# Saylo (turn on/off console.log)
-![code coverage](https://img.shields.io/codecov/c/github/gbili/saylo.svg)
-![version](https://img.shields.io/npm/v/saylo.svg)
-![downloads](https://img.shields.io/npm/dm/saylo.svg)
-![license](https://img.shields.io/npm/l/saylo.svg)
+# Star-Events
 
-## Installation
-To install this npm package do
+## Events Emitter Usage
 
-```
-npm i -P saylo
-```
+```typescript
+import { createEventEmitter } from './utils/createEventEmitter';
 
-## Usage
-Then from your javascript files import either `logger` or `log` directly with:
-```javascript
-//var logger = require('saylo');
-import logger from 'saylo';
-import { log } from 'saylo';
-```
+// Create an event emitter instance
+const emitter = createEventEmitter();
 
-Then you can replace your console.log with either `log()` or `logger.log()`:
-```javascript
-import logger from 'saylo';
+// Subscribe to events
+emitter.on('userLoggedIn', (user) => {
+  console.log('User logged in:', user);
+});
 
-const a = 'Hey there how are you?';
-const b = function() { 'any type goes' };
-logger.log('my log output is: ', a, b); // 'my log output is: ', 'Hey there how are you?' , function () {'any type goes'}
+// Subscribe to all events using wildcard
+emitter.on('*', (data) => {
+  console.log('Any event occurred:', data);
+});
 
-logger.turnOff();
-logger.log('my log output is: ', a, b); // no output
+// Emit events
+emitter.emit('userLoggedIn', { id: 1, name: 'John' });
 
-logger.turnOn();
-logger.log('my log output is: ', a, b); // 'my log output is: ', 'Hey there how are you?' , function () {'any type goes'}
+// Unsubscribe from events
+const callback = (data) => console.log(data);
+emitter.on('notification', callback);
+emitter.off('notification', callback);
+
+// Remove all callbacks for an event
+emitter.offAll('notification');
 ```
 
-## Control through env vars
-Before you load the logger module, you can set the environement variable `SAYLO_LOGGING` like:
-```
-process.env.SAYLO_LOGGING=1
-// or
-process.env.SAYLO_LOGGING=0
-```
-and it will turn the logger on or off. You can also store these in a `.env` file. In which case the `import 'dotenv/config';` statement will load them for you. (You need to `npm i -P dotenv` for this to work.
+## Custom Logging
 
-## Roadmap
-Next step:
-- Create logging sets and subsets, which you can turn on or off for finer control
-  ```
-  logger('level1').log('my string to log');
-  logger('level2').log('my string to log');
-  // or
-  logger1.log('my string to log');
-  logger2.log('my string to log');
-  ```
+```typescript
+import { createLogger } from './utils/logger';
+import { createEventEmitter } from './utils/createEventEmitter';
+
+// Create a logger with custom settings
+const logger = createLogger({
+  LOGGER_DEBUG: true, // Enable debug logs
+  LOGGER_LOG: true    // Enable warning and error logs
+});
+
+// Create an event emitter with custom logger
+const emitter = createEventEmitter({ logger });
+
+// Now all events will be logged according to your settings
+emitter.emit('test', 'Hello, World!');
+// [2023-07-20T10:00:00.000Z] [LOG] Emitting event "test" with params: Hello, World!
+```
+
+## Error Handling
+
+The event emitter automatically catches and logs errors in event handlers:
+
+```typescript
+const emitter = createEventEmitter();
+
+// This handler will throw an error
+emitter.on('buggy', () => {
+  throw new Error('Something went wrong!');
+});
+
+// The error will be caught and logged, other handlers will still execute
+emitter.emit('buggy');
+```
+
+## Type Safety
+
+TypeScript interfaces ensure type safety:
+
+```typescript
+interface UserEvents {
+  userLoggedIn: { id: number; name: string };
+  userLoggedOut: { id: number };
+}
+
+// Create a type-safe event emitter
+const emitter = createEventEmitter<UserEvents>();
+
+// TypeScript will ensure correct event names and payload types
+emitter.on('userLoggedIn', (user) => {
+  console.log(user.name); // TypeScript knows `name` exists
+});
+
+// This would cause a type error
+emitter.emit('userLoggedIn', { id: 1 }); // Error: missing 'name' property
+```
