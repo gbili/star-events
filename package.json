@@ -1,0 +1,39 @@
+{
+  "name": "star-events",
+  "version": "v0.0.1",
+  "description": "use logger.log instead of console.log and you can mute unmute (turn on or off) console.log calls",
+  "main": "build/src/index.js",
+  "types": "build/src/index.d.ts",
+  "scripts": {
+    "prepublish": "tsc",
+    "test": "tsc && mocha --recursive ./build/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gbili/saylo.git"
+  },
+  "keywords": [
+    "log"
+  ],
+  "author": "Guillermo Pages <mail@guillermo.at> (https://guillermo.at)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gbili/saylo/issues"
+  },
+  "homepage": "https://github.com/gbili/saylo#readme",
+  "devDependencies": {
+    "@types/chai": "5.0.1",
+    "@types/mocha": "10.0.10",
+    "@types/node": "22.13.5",
+    "@types/sinon": "^17.0.4",
+    "chai": "5.2.0",
+    "mocha": "^11.1.0",
+    "sinon": "^19.0.2"
+  },
+  "peerDependencies": {
+    "saylo": "0.6.1"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
