@@ -1,9 +1,9 @@
-import {
+import createEventsEmitter, {
   type Callback,
   type Subscribers,
   type EventEmitterOptions,
   type EventEmitter,
-  createSubscribers
+  createSubscribers,
 } from "./events";
 
 export {
@@ -11,5 +11,6 @@ export {
   type Subscribers,
   type EventEmitterOptions,
   type EventEmitter,
-  createSubscribers
+  createSubscribers,
+  createEventsEmitter
 };
