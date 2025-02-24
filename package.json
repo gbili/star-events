@@ -1,6 +1,6 @@
 {
   "name": "star-events",
-  "version": "v0.0.3",
+  "version": "v0.0.4",
   "description": "use logger.log instead of console.log and you can mute unmute (turn on or off) console.log calls",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
@@ -31,7 +31,7 @@
     "sinon": "^19.0.2"
   },
   "dependencies": {
-    "saylo": "0.6.1"
+    "saylo": "0.6.2"
   },
   "directories": {
     "test": "test"
